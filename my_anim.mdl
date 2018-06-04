@@ -1,0 +1,70 @@
+frames 99
+basename waves
+push
+move 250 250 0
+push
+move 0 -250 0 fa
+sphere -250 0 0 50
+pop
+push
+move 0 -250 0 fb
+sphere -200 0 0 50
+pop
+push
+move 0 -250 0 fc
+sphere -150 0 0 50
+pop
+push
+move 0 -250 0 fd
+sphere -100 0 0 50
+pop
+push
+move 0 -250 0 fe
+sphere -50 0 0 50
+pop
+push
+move 0 -250 0 ff
+sphere 0 0 0 50
+pop
+push
+move 0 -250 0 fg
+sphere 50 0 0 50
+pop
+push
+move 0 -250 0 fh
+sphere 100 0 0 50
+pop
+push
+move 0 -250 0 fi
+sphere 150 0 0 50
+pop
+push
+move 0 -250 0 fj
+sphere 200 0 0 50
+pop
+push
+move 0 -250 0 fk
+sphere 250 0 0 50
+pop
+vary fa 0 44 0 1
+vary fa 45 89 1 0
+vary fb 1 45 0 1
+vary fb 46 90 1 0
+vary fc 2 46 0 1
+vary fc 47 91 1 0
+vary fd 3 47 0 1
+vary fd 48 92 1 0
+vary fe 4 48 0 1
+vary fe 49 93 1 0
+vary ff 5 49 0 1
+vary ff 50 94 1 0
+vary fg 6 50 0 1
+vary fg 51 95 1 0
+vary fh 7 51 0 1
+vary fh 52 96 1 0
+vary fi 8 52 0 1
+vary fi 53 97 1 0
+vary fj 9 53 0 1
+vary fj 54 98 1 0
+vary fk 10 54 0 1
+vary fk 55 99 1 0
