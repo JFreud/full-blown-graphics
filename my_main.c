@@ -297,7 +297,7 @@ if(num_frames > 1) {
                    op[i].op.sphere.r, step_3d);
         matrix_mult( peek(systems), tmp );
         draw_polygons(tmp, t, zb, view, light, ambient,
-                      areflect, dreflect, sreflect);
+                      areflect, dreflect, sreflect, shading);
         tmp->lastcol = 0;
         break;
       case TORUS:
@@ -320,7 +320,7 @@ if(num_frames > 1) {
                   op[i].op.torus.r0,op[i].op.torus.r1, step_3d);
         matrix_mult( peek(systems), tmp );
         draw_polygons(tmp, t, zb, view, light, ambient,
-                      areflect, dreflect, sreflect);
+                      areflect, dreflect, sreflect, shading);
         tmp->lastcol = 0;
         break;
       case BOX:
@@ -344,7 +344,7 @@ if(num_frames > 1) {
                 op[i].op.box.d1[2]);
         matrix_mult( peek(systems), tmp );
         draw_polygons(tmp, t, zb, view, light, ambient,
-                      areflect, dreflect, sreflect);
+                      areflect, dreflect, sreflect, shading);
         tmp->lastcol = 0;
         break;
       case LINE:
@@ -501,7 +501,7 @@ else {
                      op[i].op.sphere.r, step_3d);
           matrix_mult( peek(systems), tmp );
           draw_polygons(tmp, t, zb, view, light, ambient,
-                        areflect, dreflect, sreflect);
+                        areflect, dreflect, sreflect, shading);
           tmp->lastcol = 0;
           break;
         case TORUS:
@@ -524,7 +524,7 @@ else {
                     op[i].op.torus.r0,op[i].op.torus.r1, step_3d);
           matrix_mult( peek(systems), tmp );
           draw_polygons(tmp, t, zb, view, light, ambient,
-                        areflect, dreflect, sreflect);
+                        areflect, dreflect, sreflect, shading);
           tmp->lastcol = 0;
           break;
         case BOX:
@@ -548,7 +548,7 @@ else {
                   op[i].op.box.d1[2]);
           matrix_mult( peek(systems), tmp );
           draw_polygons(tmp, t, zb, view, light, ambient,
-                        areflect, dreflect, sreflect);
+                        areflect, dreflect, sreflect, shading);
           tmp->lastcol = 0;
           break;
         case LINE:
