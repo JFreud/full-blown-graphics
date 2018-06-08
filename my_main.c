@@ -243,6 +243,9 @@ void my_main() {
   sreflect[GREEN] = 0.5;
   sreflect[BLUE] = 0.5;
 
+  char * shading = malloc(256);
+  shading = "FLAT";
+
   systems = new_stack();
   tmp = new_matrix(4, 1000);
   clear_screen( t );
@@ -273,7 +276,7 @@ if(num_frames > 1) {
       {
       case SHADING:
         // set SHADING
-        //shading_type = op[lastop].op.shading.p
+        shading = op[lastop].op.shading.p->name;
         break;
       case SPHERE:
         /* printf("Sphere: %6.2f %6.2f %6.2f r=%6.2f", */
