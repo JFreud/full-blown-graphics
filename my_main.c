@@ -115,7 +115,7 @@ void first_pass() {
   appropirate value.
   ====================*/
 struct vary_node ** second_pass() {
-  struct vary_node** knobs = malloc(num_frames * sizeof(struct vary_node)); 
+  struct vary_node** knobs = malloc(num_frames * sizeof(struct vary_node));
   int i, f;
   double start_frame, end_frame, start_val, end_val;
   char knob_name[128];
@@ -271,6 +271,10 @@ if(num_frames > 1) {
     //printf("%d: ",i);
     switch (op[i].opcode)
       {
+      case SHADING:
+        // set SHADING
+        //shading_type = op[lastop].op.shading.p
+        break;
       case SPHERE:
         /* printf("Sphere: %6.2f %6.2f %6.2f r=%6.2f", */
         /* 	 op[i].op.sphere.d[0],op[i].op.sphere.d[1], */
