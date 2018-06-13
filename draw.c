@@ -136,6 +136,7 @@ void gouraud_shading(struct matrix *points, int i, screen s, zbuffer zb, double 
       tn = cnormal;
     }
   }
+
   //Gets normals
   bc = get_lighting(bn, view, ambient, light, areflect, dreflect, sreflect);
   mc = get_lighting(mn, view, ambient, light, areflect, dreflect, sreflect);
