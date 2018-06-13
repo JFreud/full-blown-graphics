@@ -4,17 +4,19 @@
 #include "matrix.h"
 #include "ml6.h"
 
+#define BUFFER_SIZE 2048
+#define N_COLS 524287
 
 // struct vnormal {
 //   double coords[3];
 //   double normals[3];
 // };
 
-struct vnormal {
-    double coords[3];
-    double normals[3];
-    UT_hash_handle hh;         /* makes this structure hashable */
-};
+// struct vnormal {
+//     double coords[3];
+//     double normals[3];
+//     UT_hash_handle hh;         /* makes this structure hashable */
+// };
 
 void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb,
              double *view, double light[2][3], color ambient,
@@ -69,5 +71,6 @@ void draw_lines( struct matrix * points, screen s, zbuffer zb, color c);
 void draw_line(int x0, int y0, double z0,
                int x1, int y1, double z1,
                screen s, zbuffer zb, color c);
+struct matrix * parse_obj(char * filename);
 
 #endif

@@ -26,83 +26,83 @@
 
 
 // replaces draw polygons
-void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb,
-             double *view, double light[2][3], color ambient,
-             double *areflect,
-             double *dreflect,
-             double *sreflect) {
-  if ( polygons->lastcol < 3 ) {
-    printf("Need at least 3 points to draw a polygon!\n");
-    return;
-  }
-  int point;
-  double *normal;
-  // struct hsearch_data *htab = calloc(1, sizeof(struct vnormal));
-  // ENTRY e, *ep;
-  // // struct vnormal piece;
-  // hcreate_r(polygons->lastcol, htab);
-
-  for (point=0; point < polygons->lastcol-2; point+=3) {
-    struct vnormal *pieceA = NULL,
-                   *pieceB = NULL,
-                   *pieceC = NULL;
-    normal = calculate_normal(polygons, point);
-    pieceA.coords[0] = polygons->m[0][point];
-    pieceA.coords[1] = polygons->m[1][point];
-    pieceA.coords[2] = polygons->m[2][point];
-    
-   //  struct vnormal pieceA, pieceB, pieceC;
-   //  normal = calculate_normal(polygons, point);
-   //  pieceA.coords[0] = polygons->m[0][point];
-   //  pieceA.coords[1] = polygons->m[1][point];
-   //  pieceA.coords[2] = polygons->m[2][point];
-   //  pieceA.normals[0] = normal[0];
-   //  pieceA.normals[1] = normal[1];
-   //  pieceA.normals[2] = normal[2];
-   //  e.key = pieceA.coords;
-   //  e.data = pieceA.normals;
-   //  ep = hsearch(e, ENTER);
-   //  if (ep == NULL) {
-   //    fprintf(stderr, "entry failed\n");
-   //    exit(EXIT_FAILURE);
-   //  }
-   //  pieceB.coords[0] = polygons->m[0][point+1];
-   //  pieceB.coords[1] = polygons->m[1][point+1];
-   //  pieceB.coords[2] = polygons->m[2][point+1];
-   //  pieceB.normals[0] = normal[0];
-   //  pieceB.normals[1] = normal[1];
-   //  pieceB.normals[2] = normal[2];
-   //  e.key = pieceB.coords;
-   //  e.data = pieceB.normals;
-   //  ep = hsearch(e, ENTER);
-   //  if (ep == NULL) {
-   //    fprintf(stderr, "entry failed\n");
-   //    exit(EXIT_FAILURE);
-   //  }
-   //  pieceC.coords[0] = polygons->m[0][point+1];
-   //  pieceC.coords[1] = polygons->m[1][point+1];
-   //  pieceC.coords[2] = polygons->m[2][point+1];
-   //  pieceC.normals[0] = normal[0];
-   //  pieceC.normals[1] = normal[1];
-   //  pieceC.normals[2] = normal[2];
-   //  e.key = pieceC.coords;
-   //  e.data = pieceC.normals;
-   //  ep = hsearch(e, ENTER);
-   //  if (ep == NULL) {
-   //    fprintf(stderr, "entry failed\n");
-   //    exit(EXIT_FAILURE);
-   //  }
-   // }
-
-
-
- }
-
-//replaces scanline convert
-void gouraud_shading(struct matrix *points, int i, screen s, zbuffer zb, double *view, double light[2][3], color ambient, double *areflect, double *dreflect, double *sreflect) {
-
-
-}
+// void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb,
+//              double *view, double light[2][3], color ambient,
+//              double *areflect,
+//              double *dreflect,
+//              double *sreflect) {
+//   if ( polygons->lastcol < 3 ) {
+//     printf("Need at least 3 points to draw a polygon!\n");
+//     return;
+//   }
+//   int point;
+//   double *normal;
+//   // struct hsearch_data *htab = calloc(1, sizeof(struct vnormal));
+//   // ENTRY e, *ep;
+//   // // struct vnormal piece;
+//   // hcreate_r(polygons->lastcol, htab);
+//
+//   for (point=0; point < polygons->lastcol-2; point+=3) {
+//     struct vnormal *pieceA = NULL,
+//                    *pieceB = NULL,
+//                    *pieceC = NULL;
+//     normal = calculate_normal(polygons, point);
+//     pieceA.coords[0] = polygons->m[0][point];
+//     pieceA.coords[1] = polygons->m[1][point];
+//     pieceA.coords[2] = polygons->m[2][point];
+//
+//    //  struct vnormal pieceA, pieceB, pieceC;
+//    //  normal = calculate_normal(polygons, point);
+//    //  pieceA.coords[0] = polygons->m[0][point];
+//    //  pieceA.coords[1] = polygons->m[1][point];
+//    //  pieceA.coords[2] = polygons->m[2][point];
+//    //  pieceA.normals[0] = normal[0];
+//    //  pieceA.normals[1] = normal[1];
+//    //  pieceA.normals[2] = normal[2];
+//    //  e.key = pieceA.coords;
+//    //  e.data = pieceA.normals;
+//    //  ep = hsearch(e, ENTER);
+//    //  if (ep == NULL) {
+//    //    fprintf(stderr, "entry failed\n");
+//    //    exit(EXIT_FAILURE);
+//    //  }
+//    //  pieceB.coords[0] = polygons->m[0][point+1];
+//    //  pieceB.coords[1] = polygons->m[1][point+1];
+//    //  pieceB.coords[2] = polygons->m[2][point+1];
+//    //  pieceB.normals[0] = normal[0];
+//    //  pieceB.normals[1] = normal[1];
+//    //  pieceB.normals[2] = normal[2];
+//    //  e.key = pieceB.coords;
+//    //  e.data = pieceB.normals;
+//    //  ep = hsearch(e, ENTER);
+//    //  if (ep == NULL) {
+//    //    fprintf(stderr, "entry failed\n");
+//    //    exit(EXIT_FAILURE);
+//    //  }
+//    //  pieceC.coords[0] = polygons->m[0][point+1];
+//    //  pieceC.coords[1] = polygons->m[1][point+1];
+//    //  pieceC.coords[2] = polygons->m[2][point+1];
+//    //  pieceC.normals[0] = normal[0];
+//    //  pieceC.normals[1] = normal[1];
+//    //  pieceC.normals[2] = normal[2];
+//    //  e.key = pieceC.coords;
+//    //  e.data = pieceC.normals;
+//    //  ep = hsearch(e, ENTER);
+//    //  if (ep == NULL) {
+//    //    fprintf(stderr, "entry failed\n");
+//    //    exit(EXIT_FAILURE);
+//    //  }
+//    // }
+//
+//
+//
+//  }
+//
+// //replaces scanline convert
+// void gouraud_shading(struct matrix *points, int i, screen s, zbuffer zb, double *view, double light[2][3], color ambient, double *areflect, double *dreflect, double *sreflect) {
+//
+//
+// }
 
 void scanline_convert( struct matrix *points, int i, screen s, zbuffer zb, color c, char * shading) {
 
@@ -789,3 +789,93 @@ void draw_line(int x0, int y0, double z0,
   } //end drawing loop
   plot( s, zb, c, x1, y1, z );
 } //end draw_line
+
+// double *incr_array(double *old_array) {
+//   int i;
+//   int length = sizeof(old_array)/sizeof(double);
+//   double *new = malloc(sizeof(old_array) * 2);
+//   for (i = 0; i < length; i++) {
+//     new[i] = old_array[i];
+//   }
+//   free(old_array);
+//   return new;
+// }
+
+
+struct matrix * parse_obj(char * filename) {
+  FILE * fp;
+  char line[BUFFER_SIZE];
+  int num_cols = N_COLS;
+  size_t len = 0;
+  ssize_t read;
+  struct matrix * polygons = new_matrix(4, N_COLS);
+  fp = fopen(filename, "r");
+  struct matrix * vertices = new_matrix(4, N_COLS);
+  int * faces = malloc(1000);
+  int vertice_count = 0;
+  if (!fp)
+    exit(EXIT_FAILURE);
+  double args[3];
+  int face[4];
+  char * token;
+
+  while (fgets(line, sizeof(line), fp)) {
+    printf("%s\n", line);
+    if (vertice_count > num_cols) {
+      grow_matrix(vertices, num_cols * 2);
+      num_cols *= 2;
+    }
+    if(strncmp(line, "v", 1) == 0) { //vertex
+      vertice_count += 1;
+      printf("vertice_count: %d\n", vertice_count);
+      token = strtok(line, " \n");
+      printf("Type is %s\n", token);
+      int i = 0;
+      token = strtok(NULL, " \n");
+      while(token != NULL) {
+        printf("i: %d\n", i);
+        printf("Token is %s\n", token);
+        sscanf(token, "%lf", args+i);
+        printf("Arg %d is %lf\n", i, args[i]);
+        i++;
+        token = strtok(NULL, " \n");
+      }
+      vertices->m[0][vertice_count-1] = args[0];
+      vertices->m[1][vertice_count-1] = args[1];
+      vertices->m[2][vertice_count-1] = args[2];
+      vertices->lastcol += 1;
+    }
+    // printf("printing matrix...\n");
+    // print_matrix(vertices);
+    else if(strncmp(line, "f", 1) == 0) { //face
+      token = strtok(line, " \n");
+      printf("Type is %s\n", token);
+      int i = 0;
+      token = strtok(NULL, " \n");
+      while (token != NULL) {
+        printf("Token is %s\n", token);
+        sscanf(token, "%d", face+i);
+        printf("Face %d is %d\n", i, face[i]);
+        i++;
+        token = strtok(NULL, " \n");
+      }
+      if (face[3]) { //obj uses quadrilaterals instead of triangles
+        add_polygon(polygons, vertices->m[0][face[0]], vertices->m[1][face[0]], vertices->m[2][face[0]],
+                              vertices->m[0][face[1]], vertices->m[1][face[1]], vertices->m[2][face[1]],
+                              vertices->m[0][face[2]], vertices->m[1][face[2]], vertices->m[2][face[2]]);
+        add_polygon(polygons, vertices->m[0][face[1]], vertices->m[1][face[1]], vertices->m[2][face[1]],
+                              vertices->m[0][face[2]], vertices->m[1][face[2]], vertices->m[2][face[2]],
+                              vertices->m[0][face[3]], vertices->m[1][face[3]], vertices->m[2][face[3]]);
+      }
+      else { //obj uses triangles
+        add_polygon(polygons, vertices->m[0][face[0]], vertices->m[1][face[0]], vertices->m[2][face[0]],
+                              vertices->m[0][face[1]], vertices->m[1][face[1]], vertices->m[2][face[1]],
+                              vertices->m[0][face[2]], vertices->m[1][face[2]], vertices->m[2][face[2]]);
+      }
+    }
+
+  }
+  fclose(fp);
+  print_matrix(polygons);
+  return polygons;
+}

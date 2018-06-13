@@ -206,6 +206,7 @@ void my_main() {
   double step_3d = 20;
   double theta;
   double knob_value, xval, yval, zval;
+  char * mesh_name = malloc(512);
 
   //Lighting values here for easy access
   color ambient;
@@ -247,7 +248,7 @@ void my_main() {
   shading = "FLAT";
 
   systems = new_stack();
-  tmp = new_matrix(4, 1000);
+  tmp = new_matrix(4, N_COLS);
   clear_screen( t );
   clear_zbuffer(zb);
 
@@ -274,6 +275,12 @@ if(num_frames > 1) {
     //printf("%d: ",i);
     switch (op[i].opcode)
       {
+      case MESH:
+        mesh_name = op[i].op.mesh.name;
+        tmp = parse_obj(mesh_name);
+        draw_polygons(tmp, t, zb, view, light, ambient,
+                      areflect, dreflect, sreflect, shading);
+        tmp->lastcol = 0;
       case SHADING:
         // set SHADING
         shading = op[lastop].op.shading.p->name;
@@ -482,6 +489,17 @@ else {
       //printf("%d: ",i);
       switch (op[i].opcode)
         {
+        case MESH:
+          mesh_name = op[i].op.mesh.name;
+          tmp = parse_obj(mesh_name);
+          draw_polygons(tmp, t, zb, view, light, ambient,
+                        areflect, dreflect, sreflect, shading);
+          tmp->lastcol = 0;
+          break;
+        case SHADING:
+          // set SHADING
+          shading = op[lastop].op.shading.p->name;
+          break;
         case SPHERE:
           /* printf("Sphere: %6.2f %6.2f %6.2f r=%6.2f", */
           /* 	 op[i].op.sphere.d[0],op[i].op.sphere.d[1], */
@@ -649,4 +667,5 @@ else {
       printf("\n");
     }//end operation loop
 }
+  // free(mesh_name);
 }
