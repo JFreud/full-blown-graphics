@@ -5,9 +5,15 @@
 #include "ml6.h"
 
 
+// struct vnormal {
+//   double coords[3];
+//   double normals[3];
+// };
+
 struct vnormal {
-  double coords[3];
-  double normals[3];
+    double coords[3];
+    double normals[3];
+    UT_hash_handle hh;         /* makes this structure hashable */
 };
 
 void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb,
