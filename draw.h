@@ -17,7 +17,7 @@ struct vnormal {
 };
 
 void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb, double *view, double light[2][3], color ambient, double *areflect, double *dreflect, double *sreflect);
-void gouraud_shading(struct matrix *points, int i, screen s, zbuffer zb, double *view, double light[2][3], color ambient, double *areflect, double *dreflect, double *sreflect, double *normal);
+void gouraud_shading(struct matrix *points, int i, screen s, zbuffer zb, double *view, double light[2][3], color ambient, double *areflect, double *dreflect, double *sreflect, double *anormal, double *bnormal, double *cnormal);
 
 void scanline_convert( struct matrix *points, int i, screen s, zbuffer zb, color c);
 

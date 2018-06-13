@@ -36,24 +36,30 @@ void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb,
     return;
   }
   int point;
-  double *normal;
+  double *anormal;
+  double *bnormal;
+  double *cnormal;
 
   for (point=0; point < polygons->lastcol-2; point+=3) {
-    normal = calculate_normal(polygons, point);
-    if (dot_product(normal, view) > 0) {
-      gouraud_shading(polygons, point, s, zb, view, light, ambient, areflect, dreflect, sreflect, normal);
+    anormal = calculate_normal(polygons, point);
+    bnormal = calculate_normal(polygons, point+1);
+    cnormal = calculate_normal(polygons, point+2);
+    
+    if (dot_product(anormal, view) > 0) {
+      gouraud_shading(polygons, point, s, zb, view, light, ambient, areflect, dreflect, sreflect, anormal, bnormal, cnormal);
     }
   }
 }
 
 //replaces scanline convert
-void gouraud_shading(struct matrix *points, int i, screen s, zbuffer zb, double *view, double light[2][3], color ambient, double *areflect, double *dreflect, double *sreflect, double *normal) {
+void gouraud_shading(struct matrix *points, int i, screen s, zbuffer zb, double *view, double light[2][3], color ambient, double *areflect, double *dreflect, double *sreflect, double *anormal, double *bnormal, double *cnormal) {
   int top, mid, bot, y;
   int distance0, distance1, distance2;
   double x0, x1, y0, y1, y2, dx0, dx1, z0, z1, dz0, dz1;
   int flip = 0;
   color bc, mc, tc, c0, c1; //Colors of vertices
   double dc0[3], dc1[3];
+  double *bn, *mn, *tn; //normals
   
   z0 = z1 = dz0 = dz1 = 0;
 
@@ -97,11 +103,43 @@ void gouraud_shading(struct matrix *points, int i, screen s, zbuffer zb, double 
   }//end y2 bottom
   //printf("ybot: %0.2f, ymid: %0.2f, ytop: %0.2f\n", (points->m[1][bot]),(points->m[1][mid]), (points->m[1][top]));
   /* printf("bot: (%0.2f, %0.2f, %0.2f) mid: (%0.2f, %0.2f, %0.2f) top: (%0.2f, %0.2f, %0.2f)\n", */
-
+  if (bot == i+2){
+    bn = cnormal;
+    if (mid == i+1){
+      mn = bnormal;
+      tn = anormal;
+    }
+    else {
+      mn = anormal;
+      tn = bnormal;
+    }
+  }
+  else if (bot == i+1){
+    bn = bnormal;
+    if (mid == i){
+      mn = anormal;
+      tn = cnormal;
+    }
+    else {
+      mn = cnormal;
+      tn = anormal;
+    }
+  }
+  else if (bot == i){
+    bn = anormal;
+    if (mid == i+2){
+      mn = cnormal;
+      tn = bnormal;
+    }
+    else {
+      mn = bnormal;
+      tn = cnormal;
+    }
+  }
   //Gets normals
-  bc = get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect);
-  mc = get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect);
-  tc = get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect);
+  bc = get_lighting(bn, view, ambient, light, areflect, dreflect, sreflect);
+  mc = get_lighting(mn, view, ambient, light, areflect, dreflect, sreflect);
+  tc = get_lighting(tn, view, ambient, light, areflect, dreflect, sreflect);
   c0.red = c1.red = bc.red;
   c0.green = c1.green = bc.green;
   c0.blue = c1.blue = bc.blue;
