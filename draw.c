@@ -20,7 +20,7 @@
 
   Color should be set differently for each polygon.
   ====================*/
-void scanline_convert( struct matrix *points, int i, screen s, zbuffer zb, color c) {
+void scanline_convert( struct matrix *points, int i, screen s, zbuffer zb, color c, char * shading) {
 
   int top, mid, bot, y;
   int distance0, distance1, distance2;
@@ -150,7 +150,8 @@ void draw_polygons(struct matrix *polygons, screen s, zbuffer zb,
                    double *view, double light[2][3], color ambient,
                    double *areflect,
                    double *dreflect,
-                   double *sreflect) {
+                   double *sreflect,
+                   char   *shading) {
   if ( polygons->lastcol < 3 ) {
     printf("Need at least 3 points to draw a polygon!\n");
     return;
@@ -167,7 +168,7 @@ void draw_polygons(struct matrix *polygons, screen s, zbuffer zb,
 
       color c = get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect);
 
-      scanline_convert(polygons, point, s, zb, c);
+      scanline_convert(polygons, point, s, zb, c, shading);
 
       draw_line( polygons->m[0][point],
                  polygons->m[1][point],
