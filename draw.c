@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -35,7 +36,7 @@ void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb,
   }
   int point;
   double *normal;
-  htab = calloc(1, sizeof(struct vnormal))
+  struct hsearch_data *htab = calloc(1, sizeof(struct vnormal));
   ENTRY e, *ep;
   // struct vnormal piece;
   hcreate_r(polygons->lastcol, htab);
@@ -51,6 +52,11 @@ void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb,
     pieceA.normals[2] = normal[2];
     e.key = pieceA.coords;
     e.data = pieceA.normals;
+    ep = hsearch(e, ENTER);
+    if (ep == NULL) {
+      fprintf(stderr, "entry failed\n");
+      exit(EXIT_FAILURE);
+    }
     pieceB.coords[0] = polygons->m[0][point+1];
     pieceB.coords[1] = polygons->m[1][point+1];
     pieceB.coords[2] = polygons->m[2][point+1];
@@ -59,8 +65,26 @@ void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb,
     pieceB.normals[2] = normal[2];
     e.key = pieceB.coords;
     e.data = pieceB.normals;
-
+    ep = hsearch(e, ENTER);
+    if (ep == NULL) {
+      fprintf(stderr, "entry failed\n");
+      exit(EXIT_FAILURE);
+    }
+    pieceC.coords[0] = polygons->m[0][point+1];
+    pieceC.coords[1] = polygons->m[1][point+1];
+    pieceC.coords[2] = polygons->m[2][point+1];
+    pieceC.normals[0] = normal[0];
+    pieceC.normals[1] = normal[1];
+    pieceC.normals[2] = normal[2];
+    e.key = pieceC.coords;
+    e.data = pieceC.normals;
+    ep = hsearch(e, ENTER);
+    if (ep == NULL) {
+      fprintf(stderr, "entry failed\n");
+      exit(EXIT_FAILURE);
+    }
    }
+
  }
 
 //replaces scanline convert
