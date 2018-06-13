@@ -13,7 +13,7 @@
 struct vnormal {
     double coords[3];
     double normals[3];
-    UT_hash_handle hh;         /* makes this structure hashable */
+  //UT_hash_handle hh;
 };
 
 void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb,
@@ -21,7 +21,7 @@ void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb,
              double *areflect,
              double *dreflect,
              double *sreflect);
-void gouraud_shading(struct matrix *points, int i, screen s, zbuffer zb, double *view, double light[2][3], color ambient, double *areflect, double *dreflect, double *sreflect);
+void gouraud_shading(struct matrix *points, int i, screen s, zbuffer zb, double *view, double light[2][3], color ambient, double *areflect, double *dreflect, double *sreflect, double *normal);
 
 void scanline_convert( struct matrix *points, int i, screen s, zbuffer zb, color c, char * shading );
 

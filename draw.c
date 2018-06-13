@@ -43,13 +43,32 @@ void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb,
   // hcreate_r(polygons->lastcol, htab);
 
   for (point=0; point < polygons->lastcol-2; point+=3) {
+    /*
     struct vnormal *pieceA = NULL,
                    *pieceB = NULL,
                    *pieceC = NULL;
+		   */
     normal = calculate_normal(polygons, point);
-    pieceA.coords[0] = polygons->m[0][point];
-    pieceA.coords[1] = polygons->m[1][point];
-    pieceA.coords[2] = polygons->m[2][point];
+    /*
+    pieceA->coords[0] = polygons->m[0][point];
+    pieceA->coords[1] = polygons->m[1][point];
+    pieceA->coords[2] = polygons->m[2][point];
+    pieceA->normals[0] = normal[0];
+    pieceA->normals[1] = normal[1];
+    pieceA->normals[2] = normal[2];
+    pieceB->coords[0] = polygons->m[0][point+1];
+    pieceB->coords[1] = polygons->m[1][point+1];
+    pieceB->coords[2] = polygons->m[2][point+1];
+    pieceB->normals[0] = normal[0];
+    pieceB->normals[1] = normal[1];
+    pieceB->normals[2] = normal[2];
+    pieceC->coords[0] = polygons->m[0][point+2];
+    pieceC->coords[1] = polygons->m[1][point+2];
+    pieceC->coords[2] = polygons->m[2][point+2];
+    pieceC->normals[0] = normal[0];
+    pieceC->normals[1] = normal[1];
+    pieceC->normals[2] = normal[2];
+    */
     
    //  struct vnormal pieceA, pieceB, pieceC;
    //  normal = calculate_normal(polygons, point);
@@ -93,15 +112,118 @@ void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb,
    //    exit(EXIT_FAILURE);
    //  }
    // }
-
-
-
  }
 
 //replaces scanline convert
-void gouraud_shading(struct matrix *points, int i, screen s, zbuffer zb, double *view, double light[2][3], color ambient, double *areflect, double *dreflect, double *sreflect) {
+  void gouraud_shading(struct matrix *points, int i, screen s, zbuffer zb, double *view, double light[2][3], color ambient, double *areflect, double *dreflect, double *sreflect, double *normal) {
+  int top, mid, bot, y;
+  int distance0, distance1, distance2;
+  double x0, x1, y0, y1, y2, dx0, dx1, z0, z1, dz0, dz1;
+  int flip = 0;
+  color bc, mc, tc, c0, c1; //Colors of vertices
+  double dc0[3], dc1[3];
+  
+  z0 = z1 = dz0 = dz1 = 0;
 
+  y0 = points->m[1][i];
+  y1 = points->m[1][i+1];
+  y2 = points->m[1][i+2];
 
+  //find bot, mid, top
+  if ( y0 <= y1 && y0 <= y2) {
+    bot = i;
+    if (y1 <= y2) {
+      mid = i+1;
+      top = i+2;
+    }
+    else {
+      mid = i+2;
+      top = i+1;
+    }
+  }//end y0 bottom
+  else if (y1 <= y0 && y1 <= y2) {
+    bot = i+1;
+    if (y0 <= y2) {
+      mid = i;
+      top = i+2;
+    }
+    else {
+      mid = i+2;
+      top = i;
+    }
+  }//end y1 bottom
+  else {
+    bot = i+2;
+    if (y0 <= y1) {
+      mid = i;
+      top = i+1;
+    }
+    else {
+      mid = i+1;
+      top = i;
+    }
+  }//end y2 bottom
+  //printf("ybot: %0.2f, ymid: %0.2f, ytop: %0.2f\n", (points->m[1][bot]),(points->m[1][mid]), (points->m[1][top]));
+  /* printf("bot: (%0.2f, %0.2f, %0.2f) mid: (%0.2f, %0.2f, %0.2f) top: (%0.2f, %0.2f, %0.2f)\n", */
+
+  //Gets normals
+  bc = get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect);
+  mc = get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect);
+  tc = get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect);
+  c0.red = c1.red = bc.red;
+  c0.green = c1.green = bc.green;
+  c0.blue = c1.blue = bc.blue;
+  
+  x0 = points->m[0][bot];
+  x1 = points->m[0][bot];
+  z0 = points->m[2][bot];
+  z1 = points->m[2][bot];
+  y = (int)(points->m[1][bot]);
+
+  distance0 = (int)(points->m[1][top]) - y;
+  distance1 = (int)(points->m[1][mid]) - y;
+  distance2 = (int)(points->m[1][top]) - (int)(points->m[1][mid]);
+
+  //printf("distance0: %d distance1: %d distance2: %d\n", distance0, distance1, distance2);
+  dx0 = distance0 > 0 ? (points->m[0][top]-points->m[0][bot])/distance0 : 0;
+  dx1 = distance1 > 0 ? (points->m[0][mid]-points->m[0][bot])/distance1 : 0;
+  dz0 = distance0 > 0 ? (points->m[2][top]-points->m[2][bot])/distance0 : 0;
+  dz1 = distance1 > 0 ? (points->m[2][mid]-points->m[2][bot])/distance1 : 0;
+  //Color Differences (0-r, 1-g, 2-b)
+  dc0[0] = distance0 > 0 ? (tc.red - bc.red) / distance0 : 0;
+  dc0[1] = distance0 > 0 ? (tc.green - bc.green) / distance0 : 0;
+  dc0[2] = distance0 > 0 ? (tc.blue - bc.blue) / distance0 : 0;
+  dc1[0] = distance1 > 0 ? (mc.red - bc.red) / distance1 : 0;
+  dc1[1] = distance1 > 0 ? (mc.green - bc.green) / distance1 : 0;
+  dc1[2] = distance1 > 0 ? (mc.blue - bc.blue) / distance1 : 0;
+  
+  while ( y <= (int)points->m[1][top] ) {
+    //printf("\tx0: %0.2f x1: %0.2f y: %d\n", x0, x1, y);
+    draw_gouraud_line(x0, y, z0, x1, y, z1, s, zb, c0, c1);
+    c0.red = (int)(c0.red+dc0[0]);
+    c0.green = (int)(c0.green+dc0[1]);
+    c0.blue = (int)(c0.blue+dc0[2]);
+    c1.red = (int)(c1.red+dc1[0]);
+    c1.green = (int)(c1.green+dc1[1]);
+    c1.blue = (int)(c1.blue+dc1[2]);
+    x0+= dx0;
+    x1+= dx1;
+    z0+= dz0;
+    z1+= dz1;
+    y++;
+
+    if ( !flip && y >= (int)(points->m[1][mid]) ) {
+      flip = 1;
+      dx1 = distance2 > 0 ? (points->m[0][top]-points->m[0][mid])/distance2 : 0;
+      dz1 = distance2 > 0 ? (points->m[2][top]-points->m[2][mid])/distance2 : 0;
+      dc1[0] = distance2 > 0 ? (tc.red - mc.red) / distance2 : 0;
+      dc1[1] = distance2 > 0 ? (tc.green - mc.green) / distance2 : 0;
+      dc1[2] = distance2 > 0 ? (tc.blue - mc.blue) / distance2 : 0;
+      x1 = points->m[0][mid];
+      z1 = points->m[2][mid];
+    }//end flip code
+  }
+  }
 }
 
 void scanline_convert( struct matrix *points, int i, screen s, zbuffer zb, color c, char * shading) {
@@ -686,7 +808,115 @@ void draw_lines( struct matrix * points, screen s, zbuffer zb, color c) {
                s, zb, c);
 }// end draw_lines
 
+void draw_gouraud_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, zbuffer zb, color c0, color c1) {
+  int x, y, d, A, B;
+  int dy_east, dy_northeast, dx_east, dx_northeast, d_east, d_northeast;
+  int loop_start, loop_end;
+  double distance;
+  double z, dz, dc[3];
+  color c;
 
+  //swap points if going right -> left
+  int xt, yt;
+  color ct;
+  if (x0 > x1) {
+    xt = x0;
+    yt = y0;
+    z = z0;
+    x0 = x1;
+    y0 = y1;
+    z0 = z1;
+    x1 = xt;
+    y1 = yt;
+    z1 = z;
+    ct = c0;
+    c0 = c1;
+    c1 = c0;
+  }
+  c.red = c0.red;
+  c.green = c0.green;
+  c.blue = c0.blue;
+  dc[0] = (c1.red - c0.red)/(x1-x0);
+  dc[1] = (c1.green - c0.green)/(x1-x0);
+  dc[2] = (c1.blue - c0.blue)/(x1-x0);
+
+  x = x0;
+  y = y0;
+  A = 2 * (y1 - y0);
+  B = -2 * (x1 - x0);
+  int wide = 0;
+  int tall = 0;
+  //octants 1 and 8
+  if ( abs(x1 - x0) >= abs(y1 - y0) ) { //octant 1/8
+    wide = 1;
+    loop_start = x;
+    loop_end = x1;
+    dx_east = dx_northeast = 1;
+    dy_east = 0;
+    d_east = A;
+    distance = x1 - x;
+    if ( A > 0 ) { //octant 1
+      d = A + B/2;
+      dy_northeast = 1;
+      d_northeast = A + B;
+    }
+    else { //octant 8
+      d = A - B/2;
+      dy_northeast = -1;
+      d_northeast = A - B;
+    }
+  }//end octant 1/8
+  else { //octant 2/7
+    tall = 1;
+    dx_east = 0;
+    dx_northeast = 1;
+    distance = abs(y1 - y);
+    if ( A > 0 ) {     //octant 2
+      d = A/2 + B;
+      dy_east = dy_northeast = 1;
+      d_northeast = A + B;
+      d_east = B;
+      loop_start = y;
+      loop_end = y1;
+    }
+    else {     //octant 7
+      d = A/2 - B;
+      dy_east = dy_northeast = -1;
+      d_northeast = A - B;
+      d_east = -1 * B;
+      loop_start = y1;
+      loop_end = y;
+    }
+  }
+
+  z = z0;
+  dz = (z1 - z0) / distance;
+  //printf("\t(%d, %d) -> (%d, %d)\tdistance: %0.2f\tdz: %0.2f\tz: %0.2f\n", x0, y0, x1, y1, distance, dz, z);
+
+  while ( loop_start < loop_end ) {
+    plot( s, zb, c, x, y, z );
+    c.red = (int)(c.red+dc[0]);
+    c.green = (int)(c.green+dc[1]);
+    c.blue = (int)(c.blue+dc[2]);
+    if ( (wide && ((A > 0 && d > 0) ||
+                   (A < 0 && d < 0)))
+         ||
+         (tall && ((A > 0 && d < 0 ) ||
+                   (A < 0 && d > 0) ))) {
+      y+= dy_northeast;
+      d+= d_northeast;
+      x+= dx_northeast;
+    }
+    else {
+      x+= dx_east;
+      y+= dy_east;
+      d+= d_east;
+    }
+    z+= dz;
+    loop_start++;
+  } //end drawing loop
+  plot( s, zb, c, x1, y1, z );
+}
 
 
 void draw_line(int x0, int y0, double z0,
@@ -788,4 +1018,4 @@ void draw_line(int x0, int y0, double z0,
     loop_start++;
   } //end drawing loop
   plot( s, zb, c, x1, y1, z );
-} //end draw_line
+}//end draw_line
