@@ -16,24 +16,22 @@ struct vnormal {
   //UT_hash_handle hh;
 };
 
-void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb,
-             double *view, double light[2][3], color ambient,
-             double *areflect,
-             double *dreflect,
-             double *sreflect);
+void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb, double *view, double light[2][3], color ambient, double *areflect, double *dreflect, double *sreflect);
 void gouraud_shading(struct matrix *points, int i, screen s, zbuffer zb, double *view, double light[2][3], color ambient, double *areflect, double *dreflect, double *sreflect, double *normal);
 
-void scanline_convert( struct matrix *points, int i, screen s, zbuffer zb, color c, char * shading );
+void scanline_convert( struct matrix *points, int i, screen s, zbuffer zb, color c);
 
 //polygon organization
 void add_polygons( struct matrix * points,
                    double x0, double y0, double z0,
                    double x1, double y1, double z1,
                    double x2, double y2, double z2);
+void draw_flat( struct matrix * points, screen s, zbuffer zb,
+                    double *view, double light[2][3], color ambient,
+                    double *areflect, double *dreflect, double *sreflect);
 void draw_polygons( struct matrix * points, screen s, zbuffer zb,
                     double *view, double light[2][3], color ambient,
-                    double *areflect, double *dreflect, double *sreflect,
-                    char *shading );
+                    double *areflect, double *dreflect, double *sreflect, char *shading );
 
 //3d shapes
 void add_box( struct matrix * edges,
@@ -66,6 +64,7 @@ void add_edge( struct matrix * points,
                double x0, double y0, double z0,
                double x1, double y1, double z1);
 void draw_lines( struct matrix * points, screen s, zbuffer zb, color c);
+void draw_gouraud_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, zbuffer zb, color c0, color c1);
 void draw_line(int x0, int y0, double z0,
                int x1, int y1, double z1,
                screen s, zbuffer zb, color c);

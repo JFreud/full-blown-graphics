@@ -244,7 +244,7 @@ void my_main() {
   sreflect[BLUE] = 0.5;
 
   char * shading = malloc(256);
-  shading = "FLAT";
+  shading = "gouraud";
 
   systems = new_stack();
   tmp = new_matrix(4, 1000);
@@ -296,6 +296,7 @@ if(num_frames > 1) {
                    op[i].op.sphere.d[2],
                    op[i].op.sphere.r, step_3d);
         matrix_mult( peek(systems), tmp );
+	printf("drawing polygons");
         draw_polygons(tmp, t, zb, view, light, ambient,
                       areflect, dreflect, sreflect, shading);
         tmp->lastcol = 0;
@@ -472,10 +473,10 @@ if(num_frames > 1) {
     clear_zbuffer(zb);
     systems = new_stack();
     tmp = new_matrix(4, 1000);
-  } //end for loop
+  }//end for loop
   make_animation(name);
   free(knobs);
-}
+ }
 else {
   printf("num frames = 1\n");
     for (i=0;i<lastop;i++) {
@@ -500,9 +501,9 @@ else {
                      op[i].op.sphere.d[2],
                      op[i].op.sphere.r, step_3d);
           matrix_mult( peek(systems), tmp );
-          draw_polygons(tmp, t, zb, view, light, ambient,
-                        areflect, dreflect, sreflect, shading);
-          tmp->lastcol = 0;
+          //draw_polygons(tmp, t, zb, view, light, ambient, areflect, dreflect, sreflect, shading);
+	  gouraud_polygons(tmp, t, zb, view, light, ambient, areflect, dreflect, sreflect);
+	  tmp->lastcol = 0;
           break;
         case TORUS:
           /* printf("Torus: %6.2f %6.2f %6.2f r0=%6.2f r1=%6.2f", */
@@ -523,8 +524,8 @@ else {
                     op[i].op.torus.d[2],
                     op[i].op.torus.r0,op[i].op.torus.r1, step_3d);
           matrix_mult( peek(systems), tmp );
-          draw_polygons(tmp, t, zb, view, light, ambient,
-                        areflect, dreflect, sreflect, shading);
+          //draw_polygons(tmp, t, zb, view, light, ambient, areflect, dreflect, sreflect, shading);
+	  gouraud_polygons(tmp, t, zb, view, light, ambient, areflect, dreflect, sreflect);
           tmp->lastcol = 0;
           break;
         case BOX:
@@ -547,8 +548,8 @@ else {
                   op[i].op.box.d1[0],op[i].op.box.d1[1],
                   op[i].op.box.d1[2]);
           matrix_mult( peek(systems), tmp );
-          draw_polygons(tmp, t, zb, view, light, ambient,
-                        areflect, dreflect, sreflect, shading);
+          //draw_polygons(tmp, t, zb, view, light, ambient, areflect, dreflect, sreflect, shading);
+	  gouraud_polygons(tmp, t, zb, view, light, ambient, areflect, dreflect, sreflect);
           tmp->lastcol = 0;
           break;
         case LINE:
@@ -648,5 +649,5 @@ else {
         } //end opcode switch
       printf("\n");
     }//end operation loop
-}
+ }
 }

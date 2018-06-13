@@ -37,85 +37,17 @@ void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb,
   }
   int point;
   double *normal;
-  // struct hsearch_data *htab = calloc(1, sizeof(struct vnormal));
-  // ENTRY e, *ep;
-  // // struct vnormal piece;
-  // hcreate_r(polygons->lastcol, htab);
 
   for (point=0; point < polygons->lastcol-2; point+=3) {
-    /*
-    struct vnormal *pieceA = NULL,
-                   *pieceB = NULL,
-                   *pieceC = NULL;
-		   */
     normal = calculate_normal(polygons, point);
-    /*
-    pieceA->coords[0] = polygons->m[0][point];
-    pieceA->coords[1] = polygons->m[1][point];
-    pieceA->coords[2] = polygons->m[2][point];
-    pieceA->normals[0] = normal[0];
-    pieceA->normals[1] = normal[1];
-    pieceA->normals[2] = normal[2];
-    pieceB->coords[0] = polygons->m[0][point+1];
-    pieceB->coords[1] = polygons->m[1][point+1];
-    pieceB->coords[2] = polygons->m[2][point+1];
-    pieceB->normals[0] = normal[0];
-    pieceB->normals[1] = normal[1];
-    pieceB->normals[2] = normal[2];
-    pieceC->coords[0] = polygons->m[0][point+2];
-    pieceC->coords[1] = polygons->m[1][point+2];
-    pieceC->coords[2] = polygons->m[2][point+2];
-    pieceC->normals[0] = normal[0];
-    pieceC->normals[1] = normal[1];
-    pieceC->normals[2] = normal[2];
-    */
-    
-   //  struct vnormal pieceA, pieceB, pieceC;
-   //  normal = calculate_normal(polygons, point);
-   //  pieceA.coords[0] = polygons->m[0][point];
-   //  pieceA.coords[1] = polygons->m[1][point];
-   //  pieceA.coords[2] = polygons->m[2][point];
-   //  pieceA.normals[0] = normal[0];
-   //  pieceA.normals[1] = normal[1];
-   //  pieceA.normals[2] = normal[2];
-   //  e.key = pieceA.coords;
-   //  e.data = pieceA.normals;
-   //  ep = hsearch(e, ENTER);
-   //  if (ep == NULL) {
-   //    fprintf(stderr, "entry failed\n");
-   //    exit(EXIT_FAILURE);
-   //  }
-   //  pieceB.coords[0] = polygons->m[0][point+1];
-   //  pieceB.coords[1] = polygons->m[1][point+1];
-   //  pieceB.coords[2] = polygons->m[2][point+1];
-   //  pieceB.normals[0] = normal[0];
-   //  pieceB.normals[1] = normal[1];
-   //  pieceB.normals[2] = normal[2];
-   //  e.key = pieceB.coords;
-   //  e.data = pieceB.normals;
-   //  ep = hsearch(e, ENTER);
-   //  if (ep == NULL) {
-   //    fprintf(stderr, "entry failed\n");
-   //    exit(EXIT_FAILURE);
-   //  }
-   //  pieceC.coords[0] = polygons->m[0][point+1];
-   //  pieceC.coords[1] = polygons->m[1][point+1];
-   //  pieceC.coords[2] = polygons->m[2][point+1];
-   //  pieceC.normals[0] = normal[0];
-   //  pieceC.normals[1] = normal[1];
-   //  pieceC.normals[2] = normal[2];
-   //  e.key = pieceC.coords;
-   //  e.data = pieceC.normals;
-   //  ep = hsearch(e, ENTER);
-   //  if (ep == NULL) {
-   //    fprintf(stderr, "entry failed\n");
-   //    exit(EXIT_FAILURE);
-   //  }
-   // }
- }
+    if (dot_product(normal, view) > 0) {
+      gouraud_shading(polygons, point, s, zb, view, light, ambient, areflect, dreflect, sreflect, normal);
+    }
+  }
+}
 
 //replaces scanline convert
-  void gouraud_shading(struct matrix *points, int i, screen s, zbuffer zb, double *view, double light[2][3], color ambient, double *areflect, double *dreflect, double *sreflect, double *normal) {
+void gouraud_shading(struct matrix *points, int i, screen s, zbuffer zb, double *view, double light[2][3], color ambient, double *areflect, double *dreflect, double *sreflect, double *normal) {
   int top, mid, bot, y;
   int distance0, distance1, distance2;
   double x0, x1, y0, y1, y2, dx0, dx1, z0, z1, dz0, dz1;
@@ -223,10 +155,11 @@ void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb,
       z1 = points->m[2][mid];
     }//end flip code
   }
-  }
 }
 
-void scanline_convert( struct matrix *points, int i, screen s, zbuffer zb, color c, char * shading) {
+
+
+void scanline_convert( struct matrix *points, int i, screen s, zbuffer zb, color c) {
 
   int top, mid, bot, y;
   int distance0, distance1, distance2;
@@ -352,17 +285,15 @@ void add_polygon( struct matrix *polygons,
   lines connecting each points to create bounding
   triangles
   ====================*/
-void draw_polygons(struct matrix *polygons, screen s, zbuffer zb,
+void draw_flat(struct matrix *polygons, screen s, zbuffer zb,
                    double *view, double light[2][3], color ambient,
                    double *areflect,
                    double *dreflect,
-                   double *sreflect,
-                   char   *shading) {
+                   double *sreflect) {
   if ( polygons->lastcol < 3 ) {
     printf("Need at least 3 points to draw a polygon!\n");
     return;
   }
-
   int point;
   double *normal;
 
@@ -374,7 +305,7 @@ void draw_polygons(struct matrix *polygons, screen s, zbuffer zb,
 
       color c = get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect);
 
-      scanline_convert(polygons, point, s, zb, c, shading);
+      scanline_convert(polygons, point, s, zb, c);
 
       draw_line( polygons->m[0][point],
                  polygons->m[1][point],
@@ -398,6 +329,19 @@ void draw_polygons(struct matrix *polygons, screen s, zbuffer zb,
                  polygons->m[2][point+2],
                  s, zb, c);
     }
+  }
+}
+
+void draw_polygons(struct matrix *polygons, screen s, zbuffer zb,
+                   double *view, double light[2][3], color ambient,
+                   double *areflect,
+                   double *dreflect,
+                   double *sreflect,
+                   char* shading){
+  if (strcmp(shading, "flat") == 0) draw_flat(polygons, s, zb, view, light, ambient, areflect, dreflect, sreflect);
+  else if (strcmp(shading, "gouraud") == 0) {
+    printf("Running gouraud");
+    gouraud_polygons(polygons, s, zb, view, light, ambient, areflect, dreflect, sreflect);
   }
 }
 
@@ -836,10 +780,16 @@ void draw_gouraud_line(int x0, int y0, double z0, int x1, int y1, double z1, scr
   c.red = c0.red;
   c.green = c0.green;
   c.blue = c0.blue;
+  /*
   dc[0] = (c1.red - c0.red)/(x1-x0);
   dc[1] = (c1.green - c0.green)/(x1-x0);
   dc[2] = (c1.blue - c0.blue)/(x1-x0);
-
+  */
+  if (loop_end != loop_start){
+    dc[0] = (c1.red - c0.red) * 1.0 / (loop_end - loop_start);
+    dc[1] = (c1.green - c0.green) * 1.0 / (loop_end - loop_start);
+    dc[2] = (c1.blue - c0.blue) * 1.0 / (loop_end - loop_start);
+  }
   x = x0;
   y = y0;
   A = 2 * (y1 - y0);
