@@ -4,6 +4,23 @@
 #include "matrix.h"
 #include "ml6.h"
 
+
+struct vnormal {
+  double coords[3];
+  double normals[3];
+}
+
+void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb,
+             double *view, double light[2][3], color ambient,
+             double *areflect,
+             double *dreflect,
+             double *sreflect);
+void gouraud_shading(struct matrix *polygons, screen s, zbuffer zb,
+             double *view, double light[2][3], color ambient,
+             double *areflect,
+             double *dreflect,
+             double *sreflect);
+             
 void scanline_convert( struct matrix *points, int i, screen s, zbuffer zb, color c, char * shading );
 
 //polygon organization

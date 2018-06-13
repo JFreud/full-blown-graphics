@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <search.h>
 
 #include "ml6.h"
 #include "display.h"
@@ -20,6 +21,54 @@
 
   Color should be set differently for each polygon.
   ====================*/
+
+
+// replaces draw polygons
+void gouraud_polygons(struct matrix *polygons, screen s, zbuffer zb,
+             double *view, double light[2][3], color ambient,
+             double *areflect,
+             double *dreflect,
+             double *sreflect) {
+  if ( polygons->lastcol < 3 ) {
+    printf("Need at least 3 points to draw a polygon!\n");
+    return;
+  }
+  int point;
+  double *normal;
+  htab = calloc(1, sizeof(struct vnormal))
+  ENTRY e, *ep;
+  // struct vnormal piece;
+  hcreate_r(polygons->lastcol, htab);
+
+  for (point=0; point < polygons->lastcol-2; point+=3) {
+    struct vnormal pieceA, pieceB, pieceC;
+    normal = calculate_normal(polygons, point);
+    pieceA.coords[0] = polygons->m[0][point];
+    pieceA.coords[1] = polygons->m[1][point];
+    pieceA.coords[2] = polygons->m[2][point];
+    pieceA.normals[0] = normal[0];
+    pieceA.normals[1] = normal[1];
+    pieceA.normals[2] = normal[2];
+    e.key = pieceA.coords;
+    e.data = pieceA.normals;
+    pieceB.coords[0] = polygons->m[0][point+1];
+    pieceB.coords[1] = polygons->m[1][point+1];
+    pieceB.coords[2] = polygons->m[2][point+1];
+    pieceB.normals[0] = normal[0];
+    pieceB.normals[1] = normal[1];
+    pieceB.normals[2] = normal[2];
+    e.key = pieceB.coords;
+    e.data = pieceB.normals;
+
+   }
+ }
+
+//replaces scanline convert
+void gouraud_shading(struct matrix *points, int i, screen s, zbuffer zb, double *view, double light[2][3], color ambient, double *areflect, double *dreflect, double *sreflect) {
+
+
+}
+
 void scanline_convert( struct matrix *points, int i, screen s, zbuffer zb, color c, char * shading) {
 
   int top, mid, bot, y;
