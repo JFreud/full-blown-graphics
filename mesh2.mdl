@@ -1,0 +1,17 @@
+frames 100
+basename simple
+ambient 255 50 255
+light bright 0 -1 0 255 0 255
+light right 1 0 1 0 255 255
+light night -1 0 0 255 255 0
+constants shiny_white 0.1 0.3 0.7 0.1 0.3 0.7 0.1 0.3 0.7
+push
+scale 1.5 1.5 1.5
+move 200 200 0
+rotate
+y 50
+rotate
+z 50
+rotate y 360 spinny
+mesh shiny_white : Dragon.obj
+vary spinny 0 99 0 1
