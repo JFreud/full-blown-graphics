@@ -4,10 +4,10 @@
 
 ## Meshing
 - Implemented vertices and faces. Object can be retrieved using ```mesh :<filename>.obj```
-- Can create airboat and trumpet.
+- Options for files are airboat.obj, trumpet.obj, and lamp.obj.
 
 ## Shading
-- Worked on gouraud? *INCOMPLETE*
+- *FAILED TO COMPLETE T_T* (check branch gouraud for attempt)
 
 ## Lighting
 - Can set ambient lighting in the form ```ambient <r> <g> <b>```
