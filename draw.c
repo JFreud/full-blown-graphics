@@ -11,6 +11,7 @@
 #include "math.h"
 #include "gmath.h"
 #include "uthash.h"
+#include "dict.h"
 
 /*======== void scanline_convert() ==========
   Inputs: struct matrix *points
@@ -277,6 +278,52 @@ void draw_polygons(struct matrix *polygons, screen s, zbuffer zb,
                  s, zb, c);
     }
   }
+}
+/*======== void draw_gouraud() =========
+  Uses gouraud shading algorithm with
+  dict.h to create a better visual outlook
+  than that of flat_shading
+  ======================================*/
+void draw_gouraud( struct matrix *points,
+		   screen s, zbuffer zb,
+		   double *view, double light[2][3],
+		   color ambient, double *areflect,
+		   double *dreflect, double *sreflect){
+  if (points->lastcol < 3){
+    printf("Need at least 3 points to draw a polygon!\n");
+    return;
+  }
+
+  int i;
+  double *normal;
+  struct dict *normals = new_dict(points->lastcol);
+  for (i = 0; i < points->lastcol - 2; i+=3){
+    normal = calculate_normal(points, i);
+    add_pair(normals, points->m[0][i], normal[0]);
+    add_pair(normals, points->m[1][i], normal[1]);
+    add_pair(normals, points->m[2][i], normal[2]);
+
+    add_pair(normals, points->m[0][i+1], normal[0]);
+    add_pair(normals, points->m[1][i+1], normal[1]);
+    add_pair(normals, points->m[2][i+1], normal[2]);
+
+    add_pair(normals, points->m[0][i+2], normal[0]);
+    add_pair(normals, points->m[1][i+2], normal[1]);
+    add_pair(normals, points->m[2][i+2], normal[2]);
+  }
+
+  for (i=0; i < points->lastcol - 2; i+=3){
+    normal = calculate_normal(points, i);
+    if (dot_product(normal, view) > 0) {
+      color c = get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect);
+      shade_gouraud(points, i, s, zb, view, light, ambient, areflect, dreflect, sreflect, normals);
+    }
+  }
+}
+
+//shade_gouraud()
+void shade_gouraud(struct matrix *points, int i, screen s, zbuffer zb, double *view, double light[2][3], color ambient, double *areflect, double *dreflect, double *sreflect, struct dict *normals){
+  return;
 }
 
 /*======== void add_box() ==========
