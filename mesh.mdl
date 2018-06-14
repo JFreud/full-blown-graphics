@@ -1,19 +1,14 @@
 frames 100
 basename simple
-rotate y 360 spinny
 ambient 255 50 255
-light bright 0 -1 0 255 0 0
+light bright 0 -1 0 255 0 2550
 push
-move 50 350 0
+move 100 350 0
 scale 0.5 0.5 0.5
 rotate
 y 50
 rotate
 z 50
+rotate y 360 spinny
 mesh :trumpet.obj
-pop
-push
-move 400 250 0
-scale 25 25 25
-mesh :lamp.obj
 vary spinny 0 99 0 1

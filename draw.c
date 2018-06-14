@@ -822,23 +822,23 @@ struct matrix * parse_obj(char * filename) {
   int face_count;
 
   while (fgets(line, sizeof(line), fp)) {
-    printf("%s\n", line);
+    // printf("%s\n", line);
     if (vertice_count + 10 > num_cols) {
       grow_matrix(vertices, num_cols * 2);
       num_cols *= 2;
     }
     if(strncmp(line, "v", 1) == 0) { //vertex
       vertice_count += 1;
-      printf("vertice_count: %d\n", vertice_count);
+      // printf("vertice_count: %d\n", vertice_count);
       token = strtok(line, " \n");
-      printf("Type is %s\n", token);
+      // printf("Type is %s\n", token);
       int i = 0;
       token = strtok(NULL, " \n");
       while(token != NULL) {
-        printf("i: %d\n", i);
-        printf("Token is %s\n", token);
+        // printf("i: %d\n", i);
+        // printf("Token is %s\n", token);
         sscanf(token, "%lf", args+i);
-        printf("Arg %d is %lf\n", i, args[i]);
+        // printf("Arg %d is %lf\n", i, args[i]);
         i++;
         token = strtok(NULL, " \n");
       }
@@ -851,14 +851,14 @@ struct matrix * parse_obj(char * filename) {
     // print_matrix(vertices);
     else if(strncmp(line, "f", 1) == 0) { //face
       token = strtok(line, " \n");
-      printf("Type is %s\n", token);
+      // printf("Type is %s\n", token);
       int i = 0;
       token = strtok(NULL, " \n");
       face_count = 0;
       while (token != NULL) {
-        printf("Token is %s\n", token);
+        // printf("Token is %s\n", token);
         sscanf(token, "%d", face+i);
-        printf("Face %d is %d\n", i, face[i]);
+        // printf("Face %d is %d\n", i, face[i]);
         i++;
         face_count++;
         token = strtok(NULL, " \n");
@@ -877,10 +877,10 @@ struct matrix * parse_obj(char * filename) {
       //                         vertices->m[0][face[2]], vertices->m[1][face[2]], vertices->m[2][face[2]]);
       // }
       int j = 0;
-      printf("adding faces\n");
-      printf("face count: %d\n", face_count);
+      // printf("adding faces\n");
+      // printf("face count: %d\n", face_count);
       while(face[j]){
-        printf("%d\n", face[j]);
+        // printf("%d\n", face[j]);
         if (j < 2) {}
         else {
             add_polygon(polygons, vertices->m[0][face[0]], vertices->m[1][face[0]], vertices->m[2][face[0]],
