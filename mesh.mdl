@@ -8,11 +8,11 @@
 //vary spinny 0 99 0 1
 
 push
-move 250 250 0
-scale 30 30 30
+move 130 350 0
+scale 0.5 0.5 0.5
 rotate
 y 50
 rotate
 z 50
-mesh :airboat.obj
+mesh :trumpet.obj
 display

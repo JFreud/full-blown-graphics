@@ -823,7 +823,7 @@ struct matrix * parse_obj(char * filename) {
 
   while (fgets(line, sizeof(line), fp)) {
     printf("%s\n", line);
-    if (vertice_count > num_cols) {
+    if (vertice_count + 10 > num_cols) {
       grow_matrix(vertices, num_cols * 2);
       num_cols *= 2;
     }
@@ -894,6 +894,6 @@ struct matrix * parse_obj(char * filename) {
 
   }
   fclose(fp);
-  print_matrix(polygons);
+  // print_matrix(polygons);
   return polygons;
 }
