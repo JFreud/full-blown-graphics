@@ -4,7 +4,7 @@
 
 ## Meshing
 - Implemented vertices and faces.
-- Can create airboat.
+- Can create airboat and trumpet.
 
 ## Shading
 - Worked on gouraud? *INCOMPLETE*
