@@ -278,9 +278,11 @@ if(num_frames > 1) {
       case MESH:
         mesh_name = op[i].op.mesh.name;
         tmp = parse_obj(mesh_name);
+        matrix_mult(peek(systems), tmp);
         draw_polygons(tmp, t, zb, view, light, ambient,
                       areflect, dreflect, sreflect, shading);
         tmp->lastcol = 0;
+        break;
       case SHADING:
         // set SHADING
         shading = op[lastop].op.shading.p->name;
@@ -492,6 +494,7 @@ else {
         case MESH:
           mesh_name = op[i].op.mesh.name;
           tmp = parse_obj(mesh_name);
+          matrix_mult(peek(systems), tmp);
           draw_polygons(tmp, t, zb, view, light, ambient,
                         areflect, dreflect, sreflect, shading);
           tmp->lastcol = 0;

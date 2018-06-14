@@ -808,7 +808,7 @@ struct matrix * parse_obj(char * filename) {
   int num_cols = N_COLS;
   size_t len = 0;
   ssize_t read;
-  struct matrix * polygons = new_matrix(4, N_COLS);
+  struct matrix * polygons = new_matrix(4, 1);
   fp = fopen(filename, "r");
   struct matrix * vertices = new_matrix(4, N_COLS);
   int * faces = malloc(1000);
@@ -840,9 +840,9 @@ struct matrix * parse_obj(char * filename) {
         i++;
         token = strtok(NULL, " \n");
       }
-      vertices->m[0][vertice_count-1] = args[0];
-      vertices->m[1][vertice_count-1] = args[1];
-      vertices->m[2][vertice_count-1] = args[2];
+      vertices->m[0][vertice_count] = args[0];
+      vertices->m[1][vertice_count] = args[1];
+      vertices->m[2][vertice_count] = args[2];
       vertices->lastcol += 1;
     }
     // printf("printing matrix...\n");

@@ -5,7 +5,7 @@
 #include "ml6.h"
 
 #define BUFFER_SIZE 2048
-#define N_COLS 524287
+#define N_COLS 1000
 
 // struct vnormal {
 //   double coords[3];
