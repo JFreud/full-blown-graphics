@@ -12,3 +12,4 @@
 ## Lighting
 - Can set ambient lighting in the form ```ambient <r> <g> <b>```
 - Can set light location and color in the form ```light <name> <x> <y> <z> <r> <g> <b>```
+- Able to have multiple light sources, have different colors for seperate objects
