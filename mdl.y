@@ -7,9 +7,6 @@
 #include "matrix.h"
 
 #define YYERROR_VERBOSE 1
-
-  SYMTAB *s;
-  struct light *l;
   struct constants *c;
   struct command op[MAX_COMMANDS];
   struct matrix *m;
