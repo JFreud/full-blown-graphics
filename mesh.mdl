@@ -1,7 +1,8 @@
 frames 100
 basename simple
 ambient 255 50 255
-light bright 0 -1 0 255 0 2550
+light bright 0 -1 0 255 0 255
+constants shiny_white 0.1 0.3 0.7 0.1 0.3 0.7 0.1 0.3 0.7
 push
 move 100 350 0
 scale 0.5 0.5 0.5
@@ -10,5 +11,5 @@ y 50
 rotate
 z 50
 rotate y 360 spinny
-mesh :trumpet.obj
+mesh shiny_white :trumpet.obj
 vary spinny 0 99 0 1
