@@ -10,4 +10,5 @@
 - Worked on gouraud? *INCOMPLETE*
 
 ## Lighting
+- Can set ambient lighting in the form ```ambient <r> <g> <b>```
 - constants *INCOMPLETE*
