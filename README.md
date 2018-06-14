@@ -11,4 +11,4 @@
 
 ## Lighting
 - Can set ambient lighting in the form ```ambient <r> <g> <b>```
-- constants *INCOMPLETE*
+- Can set light location and color in the form ```light <name> <x> <y> <z> <r> <g> <b>```
