@@ -7,7 +7,7 @@
 - Can create airboat and trumpet.
 
 ## Shading
-- Worked on gouraud? *INCOMPLETE*
+- *FAILED TO COMPLETE T_T* (check branch gouraud for attempt)
 
 ## Lighting
 - Can set ambient lighting in the form ```ambient <r> <g> <b>```
