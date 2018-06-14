@@ -816,8 +816,10 @@ struct matrix * parse_obj(char * filename) {
   if (!fp)
     exit(EXIT_FAILURE);
   double args[3];
-  int face[4];
+  int face[50];
+  memset(face, 0, 50 * sizeof(int));
   char * token;
+  int face_count;
 
   while (fgets(line, sizeof(line), fp)) {
     printf("%s\n", line);
@@ -852,26 +854,42 @@ struct matrix * parse_obj(char * filename) {
       printf("Type is %s\n", token);
       int i = 0;
       token = strtok(NULL, " \n");
+      face_count = 0;
       while (token != NULL) {
         printf("Token is %s\n", token);
         sscanf(token, "%d", face+i);
         printf("Face %d is %d\n", i, face[i]);
         i++;
+        face_count++;
         token = strtok(NULL, " \n");
       }
-      if (face[3]) { //obj uses quadrilaterals instead of triangles
-        add_polygon(polygons, vertices->m[0][face[0]], vertices->m[1][face[0]], vertices->m[2][face[0]],
-                              vertices->m[0][face[1]], vertices->m[1][face[1]], vertices->m[2][face[1]],
-                              vertices->m[0][face[2]], vertices->m[1][face[2]], vertices->m[2][face[2]]);
-        add_polygon(polygons, vertices->m[0][face[1]], vertices->m[1][face[1]], vertices->m[2][face[1]],
-                              vertices->m[0][face[2]], vertices->m[1][face[2]], vertices->m[2][face[2]],
-                              vertices->m[0][face[3]], vertices->m[1][face[3]], vertices->m[2][face[3]]);
+      // if (face[3]) { //obj uses quadrilaterals instead of triangles
+      //   add_polygon(polygons, vertices->m[0][face[0]], vertices->m[1][face[0]], vertices->m[2][face[0]],
+      //                         vertices->m[0][face[1]], vertices->m[1][face[1]], vertices->m[2][face[1]],
+      //                         vertices->m[0][face[2]], vertices->m[1][face[2]], vertices->m[2][face[2]]);
+      //   add_polygon(polygons, vertices->m[0][face[1]], vertices->m[1][face[1]], vertices->m[2][face[1]],
+      //                         vertices->m[0][face[2]], vertices->m[1][face[2]], vertices->m[2][face[2]],
+      //                         vertices->m[0][face[3]], vertices->m[1][face[3]], vertices->m[2][face[3]]);
+      // }
+      // else { //obj uses triangles
+      //   add_polygon(polygons, vertices->m[0][face[0]], vertices->m[1][face[0]], vertices->m[2][face[0]],
+      //                         vertices->m[0][face[1]], vertices->m[1][face[1]], vertices->m[2][face[1]],
+      //                         vertices->m[0][face[2]], vertices->m[1][face[2]], vertices->m[2][face[2]]);
+      // }
+      int j = 0;
+      printf("adding faces\n");
+      printf("face count: %d\n", face_count);
+      while(face[j]){
+        printf("%d\n", face[j]);
+        if (j < 2) {}
+        else {
+            add_polygon(polygons, vertices->m[0][face[0]], vertices->m[1][face[0]], vertices->m[2][face[0]],
+                                  vertices->m[0][face[j-1]], vertices->m[1][face[j-1]], vertices->m[2][face[j-1]],
+                                  vertices->m[0][face[j]], vertices->m[1][face[j]], vertices->m[2][face[j]]);
+        }
+        j++;
       }
-      else { //obj uses triangles
-        add_polygon(polygons, vertices->m[0][face[0]], vertices->m[1][face[0]], vertices->m[2][face[0]],
-                              vertices->m[0][face[1]], vertices->m[1][face[1]], vertices->m[2][face[1]],
-                              vertices->m[0][face[2]], vertices->m[1][face[2]], vertices->m[2][face[2]]);
-      }
+      memset(face, 0, 50 * sizeof(int));
     }
 
   }
