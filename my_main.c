@@ -203,10 +203,10 @@ void my_main() {
   g.red = 0;
   g.green = 0;
   g.blue = 0;
-  double step_3d = 20;
+  double step_3d = 30;
   double theta;
   double knob_value, xval, yval, zval;
-  SYMTAB * tab;
+  SYMTAB * sym;
   char * mesh_name = malloc(512);
 
   //Lighting values here for easy access
@@ -217,9 +217,9 @@ void my_main() {
   double dreflect[3];
   double sreflect[3];
 
-  ambient.red = 255;
-  ambient.green = 255;
-  ambient.blue = 255;
+  ambient.red = 50;
+  ambient.green = 50;
+  ambient.blue = 50;
 
   light[LOCATION][0] = 0.5;
   light[LOCATION][1] = 0.75;
@@ -289,6 +289,14 @@ if(num_frames > 1) {
                       areflect, dreflect, sreflect, shading);
         tmp->lastcol = 0;
         break;
+      case LIGHT:
+        light[LOCATION][0] = op[i].op.light.p->s.l->l[0];
+        light[LOCATION][1] = op[i].op.light.p->s.l->l[1];
+        light[LOCATION][2] = op[i].op.light.p->s.l->l[2];
+        light[COLOR][RED] = op[i].op.light.c[0];
+        light[COLOR][GREEN] = op[i].op.light.c[1];
+        light[COLOR][BLUE] = op[i].op.light.c[2];
+        break;
       case SHADING:
         // set SHADING
         shading = op[lastop].op.shading.p->name;
@@ -300,7 +308,7 @@ if(num_frames > 1) {
         /* 	 op[i].op.sphere.r); */
         if (op[i].op.sphere.constants != NULL)
           {
-            tab = op[i].op.sphere.constants;
+            sym = op[i].op.sphere.constants;
 
             //printf("\tconstants: %s",op[i].op.sphere.constants->name);
           }
@@ -512,6 +520,14 @@ else {
                         areflect, dreflect, sreflect, shading);
           tmp->lastcol = 0;
           break;
+        case LIGHT:
+          light[LOCATION][0] = op[i].op.light.p->s.l->l[0];
+          light[LOCATION][1] = op[i].op.light.p->s.l->l[1];
+          light[LOCATION][2] = op[i].op.light.p->s.l->l[2];
+          light[COLOR][RED] = op[i].op.light.c[0];
+          light[COLOR][GREEN] = op[i].op.light.c[1];
+          light[COLOR][BLUE] = op[i].op.light.c[2];
+        break;
         case SHADING:
           // set SHADING
           shading = op[lastop].op.shading.p->name;
