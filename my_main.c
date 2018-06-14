@@ -18,7 +18,7 @@
                      multiply the current top of the
                      origins stack by it.
 
-  box/sphere/torus: create a solid object based on the
+  box/sphere/torus/cylinder: create a solid object based on the
                     provided values. Store that in a
                     temporary matrix, multiply it by the
                     current top of the origins stack, then
@@ -409,6 +409,30 @@ if(num_frames > 1) {
                 op[i].op.box.d0[2],
                 op[i].op.box.d1[0],op[i].op.box.d1[1],
                 op[i].op.box.d1[2]);
+        matrix_mult( peek(systems), tmp );
+        draw_polygons(tmp, t, zb, view, light, ambient,
+                      areflect, dreflect, sreflect, shading);
+        tmp->lastcol = 0;
+        break;
+      case CYLINDER:
+        if (op[i].op.cylinder.constants != NULL)
+          {
+            sym = op[i].op.cylinder.constants;
+            areflect[RED] = sym->s.c->r[0];
+            areflect[GREEN] = sym->s.c->g[0];
+            areflect[BLUE] = sym->s.c->b[0];
+            dreflect[RED] = sym->s.c->r[1];
+            dreflect[GREEN] = sym->s.c->g[1];
+            dreflect[BLUE] = sym->s.c->b[1];
+            sreflect[RED] = sym->s.c->r[2];
+            sreflect[GREEN] = sym->s.c->g[2];
+            sreflect[BLUE] = sym->s.c->b[2];
+	    //printf("\tconstants: %s",op[i].op.box.constants->name);
+          }
+	if (op[i].op.cylinder.cs != NULL){
+	  //printf("\tcs: %s",op[i].op.box.cs->name);
+	}
+        add_cylinder(tmp, op[i].op.cylinder.d[0], op[i].op.cylinder.d[1], op[i].op.cylinder.d[2], op[i].op.cylinder.r, op[i].op.cylinder.h, step_3d);
         matrix_mult( peek(systems), tmp );
         draw_polygons(tmp, t, zb, view, light, ambient,
                       areflect, dreflect, sreflect, shading);

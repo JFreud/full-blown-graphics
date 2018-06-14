@@ -51,7 +51,7 @@ void add_torus( struct matrix * edges,
                 double r1, double r2, int step );
 struct matrix * generate_torus( double cx, double cy, double cz,
                                 double r1, double r2, int step );
-
+void add_cylinder(struct matrix *polygons, double cx, double cy, double cz, double r, double h, int step)
 //advanced shapes
 void add_circle( struct matrix * edges,
                  double cx, double cy, double cz,

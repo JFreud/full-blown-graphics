@@ -541,6 +541,36 @@ struct matrix * generate_torus( double cx, double cy, double cz,
   return points;
 }
 
+/*=======PRIMITIVES=======
+  Inputs: center x, center y, center z
+  radius, height, resolution(step)  
+  ========================*/
+void add_cylinder(struct matrix *polygons, double cx, double cy, double cz, double r, double h, int step){
+  struct matrix *points = new_matrix(4, step * step);
+  int circle, h, h_begin, h_end, c_begin, c_end;
+  double x, y, z, height, circle, t;
+
+  x0 = r+cx;
+  y0 = cy;
+  z0 = cz;
+  int i;
+
+  //Goes through each side of the face
+  for (i=1; i<=step; i++){
+    t = (double)i/step;
+    x1 = r * cos( 2*M_PI*t ) + cx;
+    z1 = r * sin( 2*M_PI*t ) + cz;
+
+    add_polygon(polygons, x0, cy, z0, x1, cy, z1, x1, cy+h, z1);
+    add_polygon(polygons, x0, cy, z0, x1, cy+h, z1, x0, cy+h, z0);
+    add_polygon(polygons, cx, cy, cz, x1, cy, z1,x0, cy, z0);
+    add_polygon(polygons, cx, cy+h, cz, x0, cy+h, z0, x1, cy+h, z1);
+    
+    x0 = x1;
+    z0 = z1;
+  }
+}
+
 /*======== void add_circle() ==========
   Inputs:   struct matrix * points
   double cx
