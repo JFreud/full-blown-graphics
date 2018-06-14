@@ -206,6 +206,7 @@ void my_main() {
   double step_3d = 20;
   double theta;
   double knob_value, xval, yval, zval;
+  SYMTAB * tab;
   char * mesh_name = malloc(512);
 
   //Lighting values here for easy access
@@ -216,9 +217,9 @@ void my_main() {
   double dreflect[3];
   double sreflect[3];
 
-  ambient.red = 50;
-  ambient.green = 50;
-  ambient.blue = 50;
+  ambient.red = 255;
+  ambient.green = 255;
+  ambient.blue = 255;
 
   light[LOCATION][0] = 0.5;
   light[LOCATION][1] = 0.75;
@@ -275,6 +276,11 @@ if(num_frames > 1) {
     //printf("%d: ",i);
     switch (op[i].opcode)
       {
+      case AMBIENT:
+        ambient.red = op[i].op.ambient.c[0];
+        ambient.green = op[i].op.ambient.c[1];
+        ambient.blue = op[i].op.ambient.c[2];
+        break;
       case MESH:
         mesh_name = op[i].op.mesh.name;
         tmp = parse_obj(mesh_name);
@@ -294,6 +300,8 @@ if(num_frames > 1) {
         /* 	 op[i].op.sphere.r); */
         if (op[i].op.sphere.constants != NULL)
           {
+            tab = op[i].op.sphere.constants;
+
             //printf("\tconstants: %s",op[i].op.sphere.constants->name);
           }
         if (op[i].op.sphere.cs != NULL)
@@ -491,6 +499,11 @@ else {
       //printf("%d: ",i);
       switch (op[i].opcode)
         {
+        case AMBIENT:
+          ambient.red = op[i].op.ambient.c[0];
+          ambient.green = op[i].op.ambient.c[1];
+          ambient.blue = op[i].op.ambient.c[2];
+        break;
         case MESH:
           mesh_name = op[i].op.mesh.name;
           tmp = parse_obj(mesh_name);
