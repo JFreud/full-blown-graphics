@@ -3,7 +3,7 @@
 ### Period 4
 
 ## Meshing
-- Implemented vertices and faces.
+- Implemented vertices and faces. Object can be retrieved using ```mesh :<filename>.obj```
 - Can create airboat and trumpet.
 
 ## Shading
